@@ -4,8 +4,9 @@ This is a PoC of a WhatsApp virtual assistant that creates leads in Salesforce. 
 
 ## Requirements
 
-- You need [Twilio's WhatsApp Sandbox](https://www.twilio.com/docs/whatsapp/sandbox)
-- You need an OpenAI API Key
+- [Twilio's WhatsApp Sandbox](https://www.twilio.com/docs/whatsapp/sandbox)
+- OpenAI API Key
+- Ngrok Account
 
 Then setup your environment variables based on `env.exapmle.sh` in a `env.sh` file and activate them in your terminal: `source env.sh`
 
