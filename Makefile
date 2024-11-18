@@ -19,3 +19,14 @@ docker-run:
 		-v $(PWD):/usr/src/app \
 		-p 5000:5000 \
 		$(IMAGE_TAG)
+
+docker-ngrok:
+	@echo "docker run --rm -it"
+	@echo "\t-e NGROK_AUTHTOKEN=XXXXXXX"
+	@echo "\tngrok/ngrok:latest"
+	@echo "\thttp $$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' $(CONTAINER_NAME)):5000"
+	@docker run --rm -it \
+		-e NGROK_AUTHTOKEN=$(NGROK_AUTHTOKEN) \
+		ngrok/ngrok:latest \
+		http $$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" \
+		$(CONTAINER_NAME)):5000
