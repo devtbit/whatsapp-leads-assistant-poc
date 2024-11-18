@@ -5,7 +5,9 @@ from flask import Flask, request
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 
+from langchain.tools import tool
 from langchain_openai import ChatOpenAI
+from langgraph.prebuilt import create_react_agent
 
 
 # Twilio setup
@@ -17,6 +19,38 @@ client = Client(account_sid, auth_token)
 
 # Flask setup
 app = Flask(__name__)
+
+
+def load_text_file(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+        content = file.read()
+
+    return content
+
+
+@tool
+def capture_lead(name: str,
+                 phone_number: str,
+                 email: str,
+                 company_name: str) -> str:
+    """
+    Creates a lead in Salesforce with the given information.
+    """
+    printf(f"creating lead in salesforce: {name}, {phone_number}, {email}, {company_name}", flush=True)  # noqa
+    return '{"status": "success"}'
+
+
+def init_graph():
+    llm = ChatOpenAI(model="gpt-4o-mini")
+    main_prompt = load_text_file("prompts/main.txt")
+
+    tools = [
+        capture_lead,
+    ]
+
+    return create_react_agent(llm,
+                              tools,
+                              state_modifier=main_prompt)
 
 
 @app.route("/test-send-message", methods=['GET'])
@@ -45,21 +79,15 @@ def reply():
     # user_id = request.values.get("WaId")  # user's WhatsApp ID
     message_body = request.values.get("Body")  # user's input
 
-    llm = ChatOpenAI(model="gpt-4o-mini")
+    graph = init_graph()
 
-    messages = [
-        (
-            "system",
-            "You are a helpful assistant"
-        ),
-        ("human", message_body),
-    ]
+    response = graph.invoke(
+        {"messages": [("user", message_body)]})
 
-    response = llm.invoke(messages)
     print(response, flush=True)
 
     resp = MessagingResponse()
-    resp.message(response.content)
+    resp.message(response['messages'][-1].content)
 
     return str(resp)
 
