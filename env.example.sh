@@ -1,3 +1,3 @@
-export ACCOUNT_SID=
-export AUTH_TOKEN=
+export TWILIO_ACCOUNT_SID=
+export TWILIO_AUTH_TOKEN=
 export WHATSAPP_BOT_NO=

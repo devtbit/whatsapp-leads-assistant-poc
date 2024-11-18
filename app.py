@@ -5,8 +5,8 @@ from twilio.rest import Client
 
 
 # Twilio setup
-account_sid = os.getenv("ACCOUNT_SID")
-auth_token = os.getenv("AUTH_TOKEN")
+account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 whatsapp_bot_no = os.getenv("WHATSAPP_BOT_NO")
 
 client = Client(account_sid, auth_token)
@@ -18,7 +18,7 @@ app = Flask(__name__)
 @app.route("/test-send-message", methods=['GET'])
 def send_message():
     to = request.args.get("to")
-    print(f"Sending message to whatsapp:+{to} from whatsapp:+{whatsapp_bot_no}")
+    print(f"Sending message to whatsapp:+{to}")
 
     message = client.messages.create(
         from_=f"whatsapp:+{whatsapp_bot_no}",
