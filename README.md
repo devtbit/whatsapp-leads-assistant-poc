@@ -7,6 +7,7 @@ This is a PoC of a WhatsApp virtual assistant that creates leads in Salesforce. 
 - [Twilio's WhatsApp Sandbox](https://www.twilio.com/docs/whatsapp/sandbox)
 - OpenAI API Key
 - Ngrok Account
+- [Salesforce Developer Edition](https://developer.salesforce.com/signup)
 
 Then setup your environment variables based on `env.exapmle.sh` in a `env.sh` file and activate them in your terminal: `source env.sh`
 
@@ -32,6 +33,10 @@ You can test that your sandbox is working with the number you used to join:
 ```
 curl http://localhost:5000/test-send-message?to=1234567890
 ```
+
+### Salesforce JWT + Connected App
+
+You need to setup JWT Server-to-Server flow with a Connected App. [Here is a useful guide](https://medium.com/@sfdcpulse/salesforce-oauth-jwt-bearer-flow-for-server-to-salesforce-integration-27c7ffbbe946)
 
 ### Twilio Sandbox
 
