@@ -3,3 +3,5 @@ export TWILIO_AUTH_TOKEN=
 export WHATSAPP_BOT_NO=
 export NGROK_AUTHTOKEN=
 export OPENAI_API_KEY=
+export SF_CONSUMER_KEY=
+export SF_USER=

@@ -10,6 +10,8 @@ docker-run:
 	@echo "\t-e TWILIO_AUTH_TOKEN=XXXXXXX"
 	@echo "\t-e WHATSAPP_BOT_NO=XXXXXXXX"
 	@echo "\t-e OPENAI_API_KEY=sk-XXXXXXXXX"
+	@echo "\t-e SF_CONSUMER_KEY=XXXXXXXXXX"
+	@echo "\t-e SF_USER=$(SF_USER)"
 	@echo "\t-v $(PWD):/usr/src/app"
 	@echo "\t-p 5000:5000"
 	@echo "\t$(IMAGE_TAG)"
@@ -18,6 +20,8 @@ docker-run:
 		-e TWILIO_AUTH_TOKEN=$(TWILIO_AUTH_TOKEN) \
 		-e WHATSAPP_BOT_NO=$(WHATSAPP_BOT_NO) \
 		-e OPENAI_API_KEY=$(OPENAI_API_KEY) \
+		-e SF_CONSUMER_KEY=$(SF_CONSUMER_KEY) \
+		-e SF_USER=$(SF_USER) \
 		-v $(PWD):/usr/src/app \
 		-p 5000:5000 \
 		$(IMAGE_TAG)

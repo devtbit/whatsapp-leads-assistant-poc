@@ -35,4 +35,4 @@ curl http://localhost:5000/test-send-message?to=1234567890
 
 ### Twilio Sandbox
 
-In your Sandbox settings update the reply endpoint to your grok instance: `https://my-grok-instance.ngrok-free.app/reply`. You should now be able to interact with the LLM through Twilio's WhatsApp.
+In your Sandbox settings update the reply endpoint to your grok instance: `https://my-grok-instance.ngrok-free.app/reply`. You should now be able to interact with the virtual assistant through Twilio's WhatsApp.
