@@ -5,8 +5,10 @@ from flask import Flask, request
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 
-from langchain.tools import tool
 from langchain_openai import ChatOpenAI
+from langchain.tools import tool
+
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
 
@@ -19,6 +21,9 @@ client = Client(account_sid, auth_token)
 
 # Flask setup
 app = Flask(__name__)
+
+# Langgraph Memory
+memory = MemorySaver()
 
 
 def load_text_file(file_path):
@@ -36,7 +41,7 @@ def capture_lead(name: str,
     """
     Creates a lead in Salesforce with the given information.
     """
-    printf(f"creating lead in salesforce: {name}, {phone_number}, {email}, {company_name}", flush=True)  # noqa
+    print(f"creating lead in salesforce: {name}, {phone_number}, {email}, {company_name}", flush=True)  # noqa
     return '{"status": "success"}'
 
 
@@ -50,6 +55,7 @@ def init_graph():
 
     return create_react_agent(llm,
                               tools,
+                              checkpointer=memory,
                               state_modifier=main_prompt)
 
 
@@ -76,13 +82,14 @@ def index():
 def reply():
     # print(request.values, flush=True)
 
-    # user_id = request.values.get("WaId")  # user's WhatsApp ID
+    user_id = request.values.get("WaId")  # user's WhatsApp ID
     message_body = request.values.get("Body")  # user's input
 
     graph = init_graph()
 
     response = graph.invoke(
-        {"messages": [("user", message_body)]})
+        {"messages": [("user", message_body)]},
+        config={"configurable": {"thread_id": user_id}})
 
     print(response, flush=True)
 
