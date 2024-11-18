@@ -1,0 +1,3 @@
+export ACCOUNT_SID=
+export AUTH_TOKEN=
+export WHATSAPP_BOT_NO=

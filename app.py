@@ -1,20 +1,44 @@
 import os
 
+from flask import Flask, request
 from twilio.rest import Client
 
+
+# Twilio setup
 account_sid = os.getenv("ACCOUNT_SID")
 auth_token = os.getenv("AUTH_TOKEN")
-whatsapp_author_no = os.getenv("WHATSAPP_AUTHOR_NO")
-whatsapp_recv_no = os.getenv("WHATSAPP_RECV_NO")
+whatsapp_bot_no = os.getenv("WHATSAPP_BOT_NO")
 
 client = Client(account_sid, auth_token)
 
-print(f"Sending message to whatsapp:+{whatsapp_recv_no} from whatsapp:+{whatsapp_author_no}")
+# Flask setup
+app = Flask(__name__)
 
-message = client.messages.create(
-    from_=f"whatsapp:+{whatsapp_author_no}",
-    body="Hello world!",
-    to=f"whatsapp:+{whatsapp_recv_no}"
-)
 
-print(f"Message sent! {message.sid}")
+@app.route("/test-send-message", methods=['GET'])
+def send_message():
+    to = request.args.get("to")
+    print(f"Sending message to whatsapp:+{to} from whatsapp:+{whatsapp_bot_no}")
+
+    message = client.messages.create(
+        from_=f"whatsapp:+{whatsapp_bot_no}",
+        body="Hello world!",
+        to=f"whatsapp:+{to}"
+    )
+
+    return f"Message sent! {message.sid}"
+
+
+@app.route("/")
+def index():
+    return "Hello, world!"
+
+
+@app.route("/reply", methods=["POST"])
+def reply():
+    print(request.values, flush=True)
+    return "Message received!"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
